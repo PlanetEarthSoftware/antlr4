@@ -2,9 +2,9 @@
 
 Hi and welcome to the version 4 release of ANTLR! See [Why do we need ANTLR v4?](faq/general.md) and the [preface of the ANTLR v4 book](http://media.pragprog.com/titles/tpantlr2/preface.pdf).
 
-## Getting started the easy way using antlr4-tools
+## Getting started the easy way using Python antlr4-tools
 
-To play around with ANTLR without having to worry about installing it and the Java needed to execute it, use [antlr4-tools](https://github.com/antlr/antlr4-tools). The only requirement is Python3, which is typically installed on all developer machines on all operating systems. (See below for Windows issue.)
+To play around with ANTLR without having to worry about installing it and the Java needed to execute it, use [antlr4-tools](https://github.com/antlr/antlr4-tools). The only requirement is Python3, which is typically installed on Linux developer machines. See below for Windows issue.
 
 ```bash
 $ pip install antlr4-tools
@@ -37,7 +37,7 @@ NEWLINE : [\r\n]+ -> skip;
 INT     : [0-9]+ ;
 ```
 
-### Windows-specific issues
+### Python windows-specific issues
 
 On Windows, the `pip` command doesn't just work---you need to add the `...\local-packages\python38\scripts` dir to your `PATH`, which itself might require a fun reboot.  If you use WSL on Windows, then the pip install will also properly at the scripts directly (if you run from bash shell).
 
@@ -107,7 +107,7 @@ The following will pop up in a Java-based GUI window:
 
 <img src="https://github.com/antlr/antlr4-tools/blob/master/images/parse-tree.png?raw=true" width="300">
 
-### Generating parser code
+### Generating C++ parser code
 
 The previous section used a built-in ANTLR interpreter but typically you will ask ANTLR to generate code in the language used by your project (there are about 10 languages to choose from as of 4.11).  Here's how to generate Java code from a grammar:
 
@@ -164,27 +164,29 @@ $ alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.13.1-complete.jar:$CLASS
 
 (*Thanks to Graham Wideman*)
 
-0. Install Java (version 1.7 or higher)
-1. Download antlr-4.13.1-complete.jar (or whatever version) from [https://www.antlr.org/download.html](https://www.antlr.org/download.html)
+1. If required (javac command does not work) install Java JDK from [https://www.oracle.com/au/java/technologies/downloads](https://www.oracle.com/au/java/technologies/downloads) (version 21? or higher, NOT the version 8 runtime from java.com as it can not load the antlr4 .jar)
+2. Download antlr-4.13.1-complete.jar (or whatever version) from [https://www.antlr.org/download.html](https://www.antlr.org/download.html)
 Save to your directory for 3rd party Java libraries, say `C:\Javalib`
-2. Add `antlr-4.13.1-complete.jar` to CLASSPATH, either:
+3. Add `antlr-4.13.1-complete.jar` and `.` to `CLASSPATH`, `.` is required to load your compiled grammars with `grun`; either:
   * Permanently: Using System Properties dialog > Environment variables > Create or append to `CLASSPATH` variable
   * Temporarily, at command line:
 ```
 SET CLASSPATH=.;C:\Javalib\antlr-4.13.1-complete.jar;%CLASSPATH%
 ```
-3. Create short convenient commands for the ANTLR Tool, and TestRig, using batch files or doskey commands:
-  * Batch files (in directory in system PATH) antlr4.bat and grun.bat
+4. Create short convenient commands for the ANTLR Tool, and TestRig, using batch files or doskey commands:
+  * Batch files (in directory in system `PATH`):
+
+antlr4.bat:
 ```
 java org.antlr.v4.Tool %*
 ```
+grun.bat:
 ```
-@ECHO OFF
-SET TEST_CURRENT_DIR=%CLASSPATH:.;=%
-if "%TEST_CURRENT_DIR%" == "%CLASSPATH%" ( SET CLASSPATH=.;%CLASSPATH% )
-@ECHO ON
+@set TEST_CURRENT_DIR=%CLASSPATH:.;=%
+@if "%TEST_CURRENT_DIR%" == "%CLASSPATH%" ( SET CLASSPATH=.;%CLASSPATH% )
 java org.antlr.v4.gui.TestRig %*
 ```
+
   * Or, use doskey commands:
 ```
 doskey antlr4=java org.antlr.v4.Tool $*

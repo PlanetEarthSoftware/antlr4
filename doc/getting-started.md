@@ -164,10 +164,10 @@ $ alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.13.1-complete.jar:$CLASS
 
 (*Thanks to Graham Wideman*)
 
-0. Install Java (version 1.7 or higher)
+0. If the `java` command does not work install Java (version 21 or higher), NOT version 8 from java.com
 1. Download antlr-4.13.1-complete.jar (or whatever version) from [https://www.antlr.org/download.html](https://www.antlr.org/download.html)
 Save to your directory for 3rd party Java libraries, say `C:\Javalib`
-2. Add `antlr-4.13.1-complete.jar` to CLASSPATH, either:
+2. Add `antlr-4.13.1-complete.jar` and . to CLASSPATH, . is required for grun to load your grammars; either:
   * Permanently: Using System Properties dialog > Environment variables > Create or append to `CLASSPATH` variable
   * Temporarily, at command line:
 ```
